@@ -1,2 +1,2 @@
-# ruletka (Protokoły Sieci Web
+# ruletka (Protokoły Sieci Web)
 Aleksandra Jakubik

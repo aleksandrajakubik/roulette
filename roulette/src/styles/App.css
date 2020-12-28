@@ -1,36 +1,8 @@
 .App {
   text-align: center;
-  margin: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-.Game {
-  border: 1px black solid;
-  grid-column: span 2;
-  margin: 10px;
-  padding: 10px;
-}
 
-.UserList {
-  border: 1px black solid;
-  margin: 10px;
-  padding: 10px;
-}
-
-.Chat {
-  border: 1px black solid;
-  grid-column: span 3;
-  margin: 10px;
-}
-
-.chatbox {
-  text-align: left;
-  margin: 10px;
-  padding: 10px;
-}
-
-.Chat input {
-  width: 90%;
-  margin: 10px;
-}

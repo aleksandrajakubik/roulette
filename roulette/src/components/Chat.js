@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FixedSizeList } from 'react-window';
-import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
 import { ListItem } from '@material-ui/core';
 
@@ -15,7 +14,7 @@ function Chat() {
 
     let isRendered = useRef(false);
     useEffect(() => {
-        isRendered = true
+        isRendered = true;
         const client = MQTT.connect('ws://10.45.3.251:8000/mqtt');
         client.on('connect', () => {
             console.log('Connected')
@@ -23,7 +22,8 @@ function Chat() {
         });
         client.subscribe('chat')
         client.on('message', (topic, payload, packet) => {
-            setMessages(prevState => [...prevState, payload.toString()]);
+            const today = new Date().toLocaleTimeString();
+            setMessages(prevState => [...prevState, today + ': ' + payload.toString()]);
         });
         return () => {
             isRendered = false

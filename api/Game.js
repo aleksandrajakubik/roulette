@@ -10,6 +10,7 @@ class Game {
         this.users = [];
         this.maxUsers = 4;
         this.bets = [];
+        this.confirmations = 0;
 
     }
 
@@ -20,7 +21,7 @@ class Game {
         return "Room is full!"
     }
 
-    betValidate(userCash, betCash) {
+    _betValidate(userCash, betCash) {
         if (userCash > betCash) {
             return true
         } else {
@@ -34,14 +35,52 @@ class Game {
             "bettingUser": bettingUser,
             "bet": bet
         }
-        return this.betValidate(bettingUser.cash, bet["cash"]) ? this.bets = [...this.bets, newBet] : "You don't have enough cash for this bet!"
+        return this._betValidate(bettingUser.cash, bet["cash"]) ? this.bets = [...this.bets, newBet] : "You don't have enough cash for this bet!"
     }
 
     changeBet(userId, bet) { // bet = {"cash": 100, "type": even/odd/black/red}
         const user = this.users.find(u => u.id === userId);
         const betToChange = this.bets.find(b => b.bettingUser === user);
-        return this.betValidate(user.cash, bet["cash"]) ? betToChange.bet = bet : "You don't have enough cash for this bet!"
+        return this._betValidate(user.cash, bet["cash"]) ? betToChange.bet = bet : "You don't have enough cash for this bet!"
     }
+
+    confirmBet() {
+        this.confirmations + 1;
+    }
+
+    _getRolledColor(rolledNumber) {
+        let color = null;
+        if(this.black.includes(rolledNumber)){
+            color = "black"
+        } else if (this.red.includes(rolledNumber)) {
+            color = "red"
+        } else {
+            color = "green"
+        }
+        return color
+    }
+
+    _getRolledParity(rolledNumber) {
+        return rolledNumber%2===0 ? "even" : "odd"
+    }
+
+    getWinnersAndLosers(color, parity) {
+        const winningBets = this.bets.filter(b => b.bet["type"] === color || b.bet["type"] === parity);
+        const lostBets = this.bets.filter(b => b.bet["type"] !== color && b.bet["type"] !== parity)
+        return [winningBets, lostBets]
+    }
+
+    roll() {
+        const rolledNumber = Math.floor(Math.random() * 36);
+        const color = this._getRolledColor(rolledNumber);
+        const parity = this._getRolledParity(rolledNumber);
+        const winners = this.getWinnersAndLosers(color, parity)[0];
+        const losers = this.getWinnersAndLosers(color, parity)[1];
+        winners.map(w => w.bettingUser.cash += w.bet["cash"]);
+        losers.map(l => l.bettingUser.cash -= l.bet["cash"]);
+        return [winners, losers]
+    }
+
 
 }
 

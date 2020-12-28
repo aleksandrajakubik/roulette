@@ -33,7 +33,16 @@ class Game {
         }
     }
 
+    changeBet(userId, bet) { // bet = {"cash": 100, "type": even/odd/black/red}
+        const user = this.users.find(u => u.id === userId);
+        const betToChange = this.bets.find(b => b.bettingUser === user);
+        if (user.cash > bet["cash"]) {
+            betToChange.bet = bet
+        } else {
+            return "You don't have enough cash for this bet!"
+        }
+    }
+
 }
 
 module.exports = Game;
-

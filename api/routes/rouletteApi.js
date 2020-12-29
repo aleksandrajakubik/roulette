@@ -1,16 +1,25 @@
-import { v4 as uuidv4 } from 'uuid';
 const express = require("express");
+const Game = require('../Game');
+const uuid = require("uuid");
+const User = require("../User");
 const router = express.Router();
 
 let games = [];
 
 router.get("/games", function(req, res) {
     if(games.length === 0){
-        return res.send(false)
+        return res.send("No games have been created yet!")
     }
-    return res.send(games)
+    return res.send(`Created games: ${games.map(g => g.id)}`)
 });
 
-
+router.post("/games", function(req, res) {
+    const { nick, cash } = req.body;
+    const user = new User(uuid.v4(), nick, cash);
+    const newGame = new Game(uuid.v4());
+    newGame.addUser(user)
+    games.push(newGame)
+    return res.send(newGame)
+});
 
 module.exports = router;

@@ -52,11 +52,17 @@ router.post("/games/:id/bet", function(req, res) {
     let result = false;
     game.makeBet(userId, bet) ? result = true : null;
     return res.send(result);
-})
+});
 
-// router.put("/games/:id/bet", function(req, res) { 
-//     const { userId, bet } = req.body;
-// })
+router.put("/games/:id/bet", function(req, res) { 
+    const { userId, cash, type } = req.body;
+    const bet = {"cash": cash, "type": type};
+    const { id } = req.params;
+    const game = games.find(game => game.id === id);
+    let result = false;
+    game.changeBet(userId, bet) ? result = true : null;
+    return res.send(result)
+});
 
 
 module.exports = router;

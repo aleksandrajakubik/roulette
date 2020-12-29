@@ -37,4 +37,11 @@ router.post("/games/:id", function(req, res) {
     return res.send(true)
 });
 
+router.get("/games/:id/users", function(req, res) {
+    const { id } = req.params;
+    const game = games.find(game => game.id === parseInt(id));
+    return res.send(game.users)
+});
+
+
 module.exports = router;

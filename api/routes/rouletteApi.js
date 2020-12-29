@@ -33,8 +33,9 @@ router.post("/games/:id", function(req, res) {
     const { nick, cash } = req.body;
     const user = new User(uuid.v4(), nick, cash);
     const game = games.find(game => game.id === parseInt(id));
-    game.addUser(user);
-    return res.send(true)
+    let result = false;
+    game.addUser(user) ? result = true : null;
+    return res.send(result)
 });
 
 router.get("/games/:id/users", function(req, res) {
@@ -42,6 +43,15 @@ router.get("/games/:id/users", function(req, res) {
     const game = games.find(game => game.id === parseInt(id));
     return res.send(game.users)
 });
+
+router.post("/games/:id/bet", function(req, res) { 
+    const { userId, bet } = req.body;
+    const { id } = req.params;
+    const game = games.find(game => game.id === parseInt(id));
+    let result = false;
+    game.makeBet(userId, bet) ? result = true : null;
+    return result;
+})
 
 
 module.exports = router;

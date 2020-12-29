@@ -22,7 +22,7 @@ class Game {
     }
 
     _betValidate(userCash, betCash) {
-        if (userCash > betCash) {
+        if (parseInt(userCash) > parseInt(betCash)) {
             return true
         } else {
             return false

@@ -24,7 +24,7 @@ router.post("/games", function(req, res) {
 
 router.get("/games/:id", function(req, res) {
     const { id } = req.params;
-    const game = games.find(game => game.id === parseInt(id));
+    const game = games.find(game => game.id === id);
     return res.send(game)
 });
 
@@ -32,7 +32,7 @@ router.post("/games/:id", function(req, res) {
     const { id } = req.params;
     const { nick, cash } = req.body;
     const user = new User(uuid.v4(), nick, cash);
-    const game = games.find(game => game.id === parseInt(id));
+    const game = games.find(game => game.id === id);
     let result = false;
     game.addUser(user) ? result = true : null;
     return res.send(result)
@@ -40,18 +40,23 @@ router.post("/games/:id", function(req, res) {
 
 router.get("/games/:id/users", function(req, res) {
     const { id } = req.params;
-    const game = games.find(game => game.id === parseInt(id));
+    const game = games.find(game => game.id === id);
     return res.send(game.users)
 });
 
 router.post("/games/:id/bet", function(req, res) { 
-    const { userId, bet } = req.body;
+    const { userId, cash, type } = req.body;
+    const bet = {"cash": cash, "type": type};
     const { id } = req.params;
-    const game = games.find(game => game.id === parseInt(id));
+    const game = games.find(game => game.id === id);
     let result = false;
     game.makeBet(userId, bet) ? result = true : null;
-    return result;
+    return res.send(result);
 })
+
+// router.put("/games/:id/bet", function(req, res) { 
+//     const { userId, bet } = req.body;
+// })
 
 
 module.exports = router;

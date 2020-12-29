@@ -45,7 +45,11 @@ class Game {
     }
 
     confirmBet() {
-        this.confirmations + 1;
+        this.confirmations = this.confirmations + 1;
+        if(this.confirmations === this.users.length) {
+            return this.roll();
+        }
+        return false
     }
 
     _getRolledColor(rolledNumber) {
@@ -76,8 +80,10 @@ class Game {
         const parity = this._getRolledParity(rolledNumber);
         const winners = this.getWinnersAndLosers(color, parity)[0];
         const losers = this.getWinnersAndLosers(color, parity)[1];
-        winners.map(w => w.bettingUser.cash += w.bet["cash"]);
-        losers.map(l => l.bettingUser.cash -= l.bet["cash"]);
+        winners.map(w => w.bettingUser.cash += parseInt(w.bet["cash"]));
+        losers.map(l => l.bettingUser.cash -= parseInt(l.bet["cash"]));
+        this.bets = [];
+        this.confirmations = 0;
         return [winners, losers]
     }
 

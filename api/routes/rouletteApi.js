@@ -22,4 +22,10 @@ router.post("/games", function(req, res) {
     return res.send(newGame)
 });
 
+router.get("/games/:id", function(req, res) {
+    const { id } = req.params;
+    const game = games.find(game => game.id === parseInt(id));
+    return res.send(game)
+});
+
 module.exports = router;

@@ -18,7 +18,7 @@ class Game {
         if(this.users.length < this.maxUsers) {
             return this.users = [...this.users, user]
         }
-        return "Room is full!"
+        return false
     }
 
     _betValidate(userCash, betCash) {
@@ -35,13 +35,13 @@ class Game {
             "bettingUser": bettingUser,
             "bet": bet
         }
-        return this._betValidate(bettingUser.cash, bet["cash"]) ? this.bets = [...this.bets, newBet] : "You don't have enough cash for this bet!"
+        return this._betValidate(bettingUser.cash, bet["cash"]) ? this.bets = [...this.bets, newBet] : false
     }
 
     changeBet(userId, bet) { // bet = {"cash": 100, "type": even/odd/black/red}
         const user = this.users.find(u => u.id === userId);
         const betToChange = this.bets.find(b => b.bettingUser === user);
-        return this._betValidate(user.cash, bet["cash"]) ? betToChange.bet = bet : "You don't have enough cash for this bet!"
+        return this._betValidate(user.cash, bet["cash"]) ? betToChange.bet = bet : false
     }
 
     confirmBet() {

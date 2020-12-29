@@ -28,4 +28,13 @@ router.get("/games/:id", function(req, res) {
     return res.send(game)
 });
 
+router.post("/games/:id", function(req, res) {
+    const { id } = req.params;
+    const { nick, cash } = req.body;
+    const user = new User(uuid.v4(), nick, cash);
+    const game = games.find(game => game.id === parseInt(id));
+    game.addUser(user);
+    return res.send(true)
+});
+
 module.exports = router;

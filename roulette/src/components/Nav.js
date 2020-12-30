@@ -16,14 +16,14 @@ function Nav() {
 
     return (
         <Paper square className={classes.root}>
-            <Link to='/'>
+            <Link to='/' >
             <Tabs
                 variant="fullWidth"
                 indicatorColor="primary"
                 textColor="primary"
                 aria-label="icon tabs example"
+                value={0}
             >
-                
                 <Tab icon={<Home />} aria-label="home" />
             </Tabs>
             </Link>

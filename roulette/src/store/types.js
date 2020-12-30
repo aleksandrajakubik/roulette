@@ -1,0 +1,1 @@
+export const GET_NEWGAME = 'GET_NEWGAME';

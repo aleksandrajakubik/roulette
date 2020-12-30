@@ -33,6 +33,7 @@ function Login({ game, getNewGame }) {
     const classes = useStyles();
     const [nick, setNick] = useState("");
     const [cash, setCash] = useState("");
+    const [confirm, setConfirm] = useState(false);
 
 
     return (
@@ -40,12 +41,12 @@ function Login({ game, getNewGame }) {
             <Paper elevation={3}>
                 <h3>Login</h3>
                 <form className={classes.root} noValidate autoComplete="off">
-                    <TextField id="outlined-basic" label="Nick" variant="outlined" onChange={(e) => setNick(e.target.value)} value={nick}/>
-                    <TextField id="outlined-basic" label="Cash" variant="outlined" onChange={(e) => setCash(parseInt(e.target.value))} value={cash}/>
-                    <Button className={classes.button} variant="contained" onClick={() => getNewGame(nick, cash)}>Confirm</Button>
-                    <Link to={`/game/${game ? game.id : ""}`} style={{ textDecoration: 'none' }}>
+                    <TextField id="outlined-basic" label="Nick" variant="outlined" onChange={(e) => setNick(e.target.value)} value={nick} disabled={confirm}/>
+                    <TextField id="outlined-basic" label="Cash" variant="outlined" onChange={(e) => setCash(parseInt(e.target.value))} value={cash} disabled={confirm}/>
+                    {confirm ? null : <Button className={classes.button} variant="contained" onClick={() => {getNewGame(nick, cash); setConfirm(true)}}>Confirm</Button>}
+                    {confirm ? <Link to={`/game/${game ? game.id : ""}`} style={{ textDecoration: 'none' }}>
                     <Button className={classes.button} variant="contained">Start!</Button>
-                    </Link>
+                    </Link> : null }
                 </form>
             </Paper>
         </div>

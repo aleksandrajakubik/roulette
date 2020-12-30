@@ -4,12 +4,11 @@ import Game from './Game';
 import UserList from './UserList';
 import Chat from './Chat';
 
-function Room() {
-
+function Room({ game }) {
   return (
     <div className="Room">
       <Game />
-      <UserList />
+      <UserList user={game.user}/>
       <Chat />
     </div>
   );

@@ -1,9 +1,9 @@
 import React from 'react';
 
-function UserList() {
+function UserList({ user }) {
     return (
         <div className='UserList'>
-            UserList
+            <p>{user.nick}</p>
         </div>
     )
 }

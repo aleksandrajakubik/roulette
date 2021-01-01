@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from "react-redux";
 import '../styles/App.css';
 import {
@@ -6,12 +6,17 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import { connectToMQTT } from '../store/actions/gameAction'
 import Nav from './Nav';
 import Home from './Home';
 import Login from './Login';
 import Room from './Room';
 
-function App({ game }) {
+function App({ game, connectToMQTT }) {
+
+  useEffect(() => {
+    connectToMQTT()
+  }, [])
   return (
     <Router>
       <div className="App">
@@ -36,4 +41,4 @@ const mapStateToProps = (state) => ({
   game: state.game
 })
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, { connectToMQTT })(App);

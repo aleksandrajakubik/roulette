@@ -8,15 +8,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
-import { postBet, confirmBet } from '../store/actions/gameAction';
+import { postBet, confirmBet, getUserCashAfterRoll } from '../store/actions/gameAction';
 
-function Game({ game, client, postBet, confirmBet }) {
+function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll}) {
 
     useEffect(() => {
-        client.subscribe('winners');
+        client.subscribe('newGameStatus');
+        client.subscribe('rolledNumber');
         client.on('message', (topic, payload, packet) => {
-            if(topic==='winners'){
-                console.log(payload.toString())
+            if(topic === 'newGameStatus'){
+                getUserCashAfterRoll(parseInt(payload.toString()))
+            } else if (topic === "rolledNumber") {
+                setRolledNumber(parseInt(payload.toString()));
             }
         });
     }, [client])
@@ -31,6 +34,7 @@ function Game({ game, client, postBet, confirmBet }) {
     const classes = useStyles();
     const [bet, setBet] = useState(0);
     const [value, setValue] = useState('black');
+    const [rolledNumber, setRolledNumber] = useState("");
 
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -41,6 +45,8 @@ function Game({ game, client, postBet, confirmBet }) {
             <div className='GameState'>
                 <p>Your cash: </p>
                 <p>{game.user.cash}</p>
+                <p>Rolled number:</p>
+                <p>{rolledNumber ? rolledNumber : "Game has not started yet!"}</p>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Your bet:</FormLabel>
                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
@@ -63,4 +69,4 @@ const mapStateToProps = (state) => ({
     client: state.game.client
 })
 
-export default connect(mapStateToProps, { postBet, confirmBet })(Game);
+export default connect(mapStateToProps, { postBet, confirmBet, getUserCashAfterRoll })(Game);

@@ -1,4 +1,4 @@
-import { GET_NEWGAME, CONNECT_MQTT } from '../types';
+import { GET_NEWGAME, CONNECT_MQTT, GET_CASH } from '../types';
 
 const initialState = {
     user: null,
@@ -22,6 +22,13 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 client: action.payload
+            }
+        }
+
+        case GET_CASH: {
+            return {
+                ...state, 
+                user: {...state.user, cash: action.payload}
             }
         }
 

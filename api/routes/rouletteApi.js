@@ -62,11 +62,10 @@ router.post("/games/:id/confirm", function(req, res) {
     const game = games.find(game => game.id === id );
     const result = game.confirmBet();
     if(result) {
-        client.publish("winners", `${result[0].map(w => w["bettingUser"]["nick"])}`)
-        client.publish("losers", `${result[1].map(w => w["bettingUser"]["nick"])}`)
-
+        client.publish("newGameStatus", `${game.users[0].cash}`)
+        client.publish("rolledNumber", `${result}`)
     }
-    return res.send(result)
+    return res.send(true)
 });
 
 router.put("/games/:id/bet", function(req, res) { 

@@ -84,7 +84,7 @@ class Game {
         losers.map(l => l.bettingUser.cash -= parseInt(l.bet["cash"]));
         this.bets = [];
         this.confirmations = 0;
-        return [winners, losers]
+        return rolledNumber;
     }
 
 

@@ -6,23 +6,28 @@ import { ListItem } from '@material-ui/core';
 
 const MQTT = require('mqtt');
 
-function Chat({ user, client }) {
+function Chat({ id, user, client }) {
 
     const [text, setText] = useState('');
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        client.subscribe('chat')
+        client.subscribe(`chat/${id}`)
+        client.publish(`chat/${id}`, `${user.nick} has joined`)
         client.on('message', (topic, payload, packet) => {
-            if(topic==='chat'){
+            if(topic===`chat/${id}`){
                 const today = new Date().toLocaleTimeString();
-            setMessages(prevState => [...prevState, today + ' ' + user.nick + ': ' + payload.toString()]);
+            setMessages(prevState => [...prevState, today + ' ' + payload.toString()]);
             }
         });
+        return () => {
+            client.publish(`chat/${id}`, `${user.nick} has left`)
+        }
     }, [client]);
 
+
     function handleSend() {
-        client.publish('chat', text)
+        client.publish(`chat/${id}`, `${user.nick}: ${text}`)
     }
     function renderRow(props) {
         const { index, style } = props;
@@ -51,7 +56,8 @@ function Chat({ user, client }) {
 }
 
 const mapStateToProps = (state) => ({
-    client: state.game.client
+    client: state.game.client,
+    id: state.game.game.id
 })
 
 export default connect(mapStateToProps, null)(Chat);

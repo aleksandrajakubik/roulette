@@ -21,6 +21,10 @@ class Game {
         return false
     }
 
+    deleteUser(userId) {
+        return this.users = this.users.filter(u => u.id !== userId)
+    }
+
     _betValidate(userCash, betCash) {
         if (parseInt(userCash) > parseInt(betCash)) {
             return true

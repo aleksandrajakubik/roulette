@@ -47,6 +47,14 @@ router.get("/games/:id/users", function(req, res) {
     return res.send(game.users)
 });
 
+router.delete("/games/:id/users/:userId", function(req, res) {
+    const { id, userId } = req.params;
+    const game = games.find(game => game.id === id);
+    game.deleteUser(userId);
+    client.publish("update", `${JSON.stringify(game)}`)
+    return res.send(true);
+})
+
 router.post("/games/:id/bet", function(req, res) { 
     const { userId, cash, type } = req.body;
     const bet = {"cash": parseInt(cash), "type": type};

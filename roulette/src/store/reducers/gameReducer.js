@@ -29,7 +29,6 @@ export default function(state = initialState, action) {
         }
 
         case UPDATE_GAME: {
-            console.log('update:', action.payload)
             return {
                 ...state, 
                 game: action.payload

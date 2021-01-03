@@ -53,6 +53,14 @@ export const getGames = () => async dispatch => {
     }
 }
 
+export const deleteUser = (id, userId) => async dispatch => {
+    try {
+        const res = await axios.delete(`http://localhost:5000/games/${id}/users/${userId}`)
+    } catch(e) {
+        console.log(e)
+    }
+}
+
 export const updateGame = (game) => dispatch => {
     dispatch({
         type: UPDATE_GAME,

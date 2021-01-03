@@ -8,9 +8,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
-import { postBet, confirmBet, getUserCashAfterRoll } from '../store/actions/gameAction';
+import { postBet, confirmBet, getUserCashAfterRoll, deleteUser } from '../store/actions/gameAction';
 
-function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll}) {
+function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll, deleteUser}) {
 
     useEffect(() => {
         client.subscribe('newGameStatus');
@@ -22,6 +22,9 @@ function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll}) {
                 setRolledNumber(parseInt(payload.toString()));
             }
         });
+        return () => {
+            deleteUser(game.game.id, game.user.id)
+        }
     }, [client])
 
     const useStyles = makeStyles((theme) => ({
@@ -70,4 +73,4 @@ const mapStateToProps = (state) => ({
     client: state.game.client
 })
 
-export default connect(mapStateToProps, { postBet, confirmBet, getUserCashAfterRoll })(Game);
+export default connect(mapStateToProps, { postBet, confirmBet, getUserCashAfterRoll, deleteUser })(Game);

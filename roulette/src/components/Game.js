@@ -40,11 +40,13 @@ function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll}) {
         setValue(event.target.value);
     };
 
+    const userCash = game.game.users.find(u => u.id === game.user.id).cash;
+
     return (
         <div className='Game'>
             <div className='GameState'>
                 <p>Your cash: </p>
-                <p>{game.user.cash}</p>
+                <p>{userCash}</p>
                 <p>Rolled number:</p>
                 <p>{rolledNumber ? rolledNumber : "Game has not started yet!"}</p>
                 <FormControl component="fieldset">
@@ -65,7 +67,6 @@ function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll}) {
 }
 
 const mapStateToProps = (state) => ({
-    gameState: state.game.game,
     client: state.game.client
 })
 

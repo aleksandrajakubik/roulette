@@ -62,7 +62,7 @@ router.post("/games/:id/confirm", function(req, res) {
     const game = games.find(game => game.id === id );
     const result = game.confirmBet();
     if(result) {
-        client.publish("newGameStatus", `${game.users[0].cash}`)
+        client.publish("update", `${JSON.stringify(game)}`)
         client.publish("rolledNumber", `${result}`)
     }
     return res.send(true)

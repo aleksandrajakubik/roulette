@@ -9,8 +9,10 @@ import {
 import { connectToMQTT } from '../store/actions/gameAction'
 import Nav from './Nav';
 import Home from './Home';
-import Login from './Login';
+import NewGameLogin from './NewGameLogin';
 import Room from './Room';
+import SearchGames from './SearchGames';
+import SearchGamesLogin from './SearchGameLogin';
 
 function App({ game, connectToMQTT }) {
 
@@ -26,10 +28,16 @@ function App({ game, connectToMQTT }) {
             <Home />
           </Route>
           <Route path="/login">
-            <Login />
+            <NewGameLogin />
+          </Route>
+          <Route path="/games">
+            <SearchGames />
+          </Route>
+          <Route path="/searchLogin">
+            <SearchGamesLogin />
           </Route>
           <Route path="/game/:id">
-            <Room game={game} />
+            <Room />
           </Route>
         </Switch>
       </div>

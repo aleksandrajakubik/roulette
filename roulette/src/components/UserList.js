@@ -1,11 +1,12 @@
 import React from 'react';
 
-function UserList({ user }) {
+function UserList({ users }) {
     return (
         <div className='UserList'>
-            <p>{user.nick}</p>
+            {users.map(u => <p key={u.id}>{u.nick}</p>)}
         </div>
     )
 }
+
 
 export default UserList;

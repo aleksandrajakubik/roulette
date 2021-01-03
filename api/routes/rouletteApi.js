@@ -11,9 +11,9 @@ let games = [];
 
 router.get("/games", function(req, res) {
     if(games.length === 0){
-        return res.send("No games have been created yet!")
+        return res.send(false)
     }
-    return res.send(`Created games: ${games.map(g => g.id)}`)
+    return res.send(`${JSON.stringify(games)}`)
 });
 
 router.post("/games", function(req, res) {
@@ -36,9 +36,9 @@ router.post("/games/:id", function(req, res) {
     const { nick, cash } = req.body;
     const user = new User(uuid.v4(), nick, parseInt(cash));
     const game = games.find(game => game.id === id);
-    let result = false;
-    game.addUser(user) ? result = true : null;
-    return res.send([user,result])
+    game.addUser(user);
+    client.publish("update", `${JSON.stringify(game)}`)
+    return res.send([user, game])
 });
 
 router.get("/games/:id/users", function(req, res) {

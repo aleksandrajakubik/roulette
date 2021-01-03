@@ -1,9 +1,10 @@
-import { GET_NEWGAME, CONNECT_MQTT, GET_CASH } from '../types';
+import { GET_NEWGAME, CONNECT_MQTT, GET_CASH, GET_ALL_GAMES, UPDATE_GAME } from '../types';
 
 const initialState = {
     user: null,
     game: null,
-    client: null
+    client: null,
+    allGames: [],
 }
 
 export default function(state = initialState, action) {
@@ -15,6 +16,23 @@ export default function(state = initialState, action) {
                 ...state,
                 user: {id: action.payload[0].id, nick: action.payload[0].nick, cash: action.payload[0].cash},
                 game: action.payload[1]
+            }
+        }
+
+        case GET_ALL_GAMES: {
+            if(action.payload !== false) {
+                return {
+                    ...state,
+                    allGames: action.payload
+                }
+            }
+        }
+
+        case UPDATE_GAME: {
+            console.log('update:', action.payload)
+            return {
+                ...state, 
+                game: action.payload
             }
         }
 

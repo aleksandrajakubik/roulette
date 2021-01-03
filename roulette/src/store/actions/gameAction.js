@@ -1,4 +1,4 @@
-import { GET_NEWGAME, CONNECT_MQTT, GET_CASH } from '../types';
+import { GET_NEWGAME, CONNECT_MQTT, GET_CASH, GET_ALL_GAMES, UPDATE_GAME } from '../types';
 import axios from 'axios';
 const MQTT = require('mqtt');
 
@@ -26,6 +26,38 @@ export const getNewGame = (nick, cash) => async dispatch => {
     } catch (e) {
         console.log(e)
     }
+}
+
+export const getGame = (id, nick, cash) => async dispatch => {
+    try {
+        const res = await axios.post(`http://localhost:5000/games/${id}`, {nick, cash});
+        dispatch({
+            type: GET_NEWGAME,
+            payload: res.data
+        })
+    } catch(e) {
+        console.log(e)
+    }
+}
+
+export const getGames = () => async dispatch => {
+    try {
+        const res = await axios.get('http://localhost:5000/games');
+        dispatch({
+            type: GET_ALL_GAMES,
+            payload: res.data
+        })
+
+    } catch(e) {
+        console.log(e)
+    }
+}
+
+export const updateGame = (game) => dispatch => {
+    dispatch({
+        type: UPDATE_GAME,
+        payload: JSON.parse(game)
+    })
 }
 
 export const getUserCashAfterRoll = (cash) => dispatch => {

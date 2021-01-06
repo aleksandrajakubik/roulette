@@ -13,7 +13,8 @@ router.get("/games", function(req, res) {
     if(games.length === 0){
         return res.send(false)
     }
-    return res.send(`${JSON.stringify(games)}`)
+    const availableGames = games.filter(g => g.users.length < g.maxUsers);
+    return res.send(`${JSON.stringify(availableGames)}`)
 });
 
 router.post("/games", function(req, res) {

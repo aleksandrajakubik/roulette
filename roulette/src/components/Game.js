@@ -22,9 +22,6 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                 setConfirmed(false)
             }
         });
-        return () => {
-            deleteUser(game.game.id, game.user.id)
-        }
     }, [client])
 
     const useStyles = makeStyles((theme) => ({

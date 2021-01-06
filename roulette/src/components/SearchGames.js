@@ -19,11 +19,12 @@ function SearchGames({ games, getGames }) {
 
     const classes = useStyles();
 
-    const [gameId, setGameId] = useState("")
+    const [gameId, setGameId] = useState("");
+    const chosenGame = gameId !== "" ? games.find(g => g.id === gameId) : null;
 
     return (
         <div>
-            {gameId !== "" ? <SearchGameLogin id={gameId} /> : 
+            {gameId !== "" ? <SearchGameLogin chosenGame={chosenGame}/> : 
             games.length !== 0 ? games.map((g, index) =>
                 <Button key={g.id} className={classes.button} variant="contained" onClick={() => setGameId(g.id)}>{`Game ${index}`}</Button>)
                 : <p>No games have been created yet!</p>

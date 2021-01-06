@@ -25,6 +25,7 @@ function Chat({ id, user, client }) {
 
     function handleSend() {
         client.publish(`chat/${id}`, `${user.nick}: ${text}`)
+        setText("")
     }
     function renderRow(props) {
         const { index, style } = props;
@@ -46,6 +47,7 @@ function Chat({ id, user, client }) {
                 name='message'
                 placeholder='Send a message'
                 onChange={(event) => setText(event.target.value)}
+                value={text}
             />
             <button onClick={handleSend}>Send</button>
         </div>

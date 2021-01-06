@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import { getGames } from '../store/actions/gameAction';
-import SearchGameLogin from './SearchGameLogin';
+import PlayerRole from './PlayerRole';
 import { Button } from '@material-ui/core';
 
 function SearchGames({ games, getGames }) {
@@ -24,7 +24,7 @@ function SearchGames({ games, getGames }) {
 
     return (
         <div>
-            {gameId !== "" ? <SearchGameLogin chosenGame={chosenGame}/> : 
+            {gameId !== "" ? <PlayerRole chosenGame={chosenGame}/> : 
             games.length !== 0 ? games.map((g, index) =>
                 <Button key={g.id} className={classes.button} variant="contained" onClick={() => setGameId(g.id)}>{`Game ${index}`}</Button>)
                 : <p>No games have been created yet!</p>

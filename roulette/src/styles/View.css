@@ -1,0 +1,23 @@
+.View {
+    text-align: center;
+    margin: 10px;
+}
+.ViewGame {
+    border: 1px black solid;
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.Chatview {
+    border: 1px black solid;
+    margin: 10px;
+}
+
+.Chatview input {
+    width: 90%;
+    margin: 10px;
+  }
+  

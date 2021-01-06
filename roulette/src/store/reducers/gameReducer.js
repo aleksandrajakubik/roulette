@@ -1,4 +1,4 @@
-import { GET_NEWGAME, CONNECT_MQTT, GET_CASH, GET_ALL_GAMES, UPDATE_GAME } from '../types';
+import { GET_NEWGAME, CONNECT_MQTT, GET_VIEWER_GAME, GET_ALL_GAMES, UPDATE_GAME } from '../types';
 
 const initialState = {
     user: null,
@@ -16,6 +16,14 @@ export default function (state = initialState, action) {
                 ...state,
                 user: { id: action.payload[0].id, nick: action.payload[0].nick, cash: action.payload[0].cash },
                 game: action.payload[1]
+            }
+        }
+
+        case GET_VIEWER_GAME: {
+            return {
+                ...state,
+                user: { id: action.payload.viewerId, nick: action.payload.nick},
+                game: action.payload.game
             }
         }
 

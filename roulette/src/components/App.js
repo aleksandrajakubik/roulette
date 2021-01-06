@@ -13,6 +13,7 @@ import NewGameLogin from './NewGameLogin';
 import Room from './Room';
 import SearchGames from './SearchGames';
 import SearchGamesLogin from './SearchGameLogin';
+import View from './View';
 
 function App({ game, connectToMQTT }) {
 
@@ -38,6 +39,9 @@ function App({ game, connectToMQTT }) {
           </Route>
           <Route path="/game/:id">
             <Room />
+          </Route>
+          <Route path="/view/:id">
+            <View />
           </Route>
         </Switch>
       </div>

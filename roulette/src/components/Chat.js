@@ -6,14 +6,14 @@ import { ListItem } from '@material-ui/core';
 
 const MQTT = require('mqtt');
 
-function Chat({ id, user, client }) {
+function Chat({ id, user, client, role, component }) {
 
     const [text, setText] = useState('');
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         client.subscribe(`chat/${id}`)
-        client.publish(`chat/${id}`, `${user.nick} has joined`)
+        client.publish(`chat/${id}`, `${user.nick} (${role}) has joined`)
         client.on('message', (topic, payload, packet) => {
             if(topic===`chat/${id}`){
                 const today = new Date().toLocaleTimeString();
@@ -24,7 +24,7 @@ function Chat({ id, user, client }) {
 
 
     function handleSend() {
-        client.publish(`chat/${id}`, `${user.nick}: ${text}`)
+        client.publish(`chat/${id}`, `${user.nick} (${role}): ${text}`)
         setText("")
     }
     function renderRow(props) {
@@ -36,7 +36,7 @@ function Chat({ id, user, client }) {
         );
     }
     return (
-        <div className='Chat'>
+        <div className={`Chat${component}`}>
             <div className='chatbox'>
                 <FixedSizeList height={150} itemSize={25} itemCount={messages.length} >
                     {renderRow}

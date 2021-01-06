@@ -18,7 +18,7 @@ function Room({ game, updateGame, deleteUser }) {
     });
     return () => {
       deleteUser(game.game.id, game.user.id)
-      game.client.publish(`chat/${game.game.id}`, `${game.user.nick} has left`)
+      game.client.publish(`chat/${game.game.id}`, `${game.user.nick}(player) has left`)
     };
   }, []);
 
@@ -26,7 +26,7 @@ function Room({ game, updateGame, deleteUser }) {
     <div className="Room">
       <Game game={game} />
       <UserList users={game.game.users} />
-      <Chat user={game.user} />
+      <Chat user={game.user} role={"player"} component={"room"}/>
     </div>
   );
 }

@@ -29,7 +29,8 @@ router.post("/games", function(req, res) {
 router.get("/games/:id", function(req, res) {
     const { id } = req.params;
     const game = games.find(game => game.id === id);
-    return res.send(game)
+    const viewerId = uuid.v4();
+    return res.send([viewerId, game])
 });
 
 router.post("/games/:id", function(req, res) {

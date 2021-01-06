@@ -34,6 +34,17 @@ function Login({ game, getNewGame }) {
     const [nick, setNick] = useState("");
     const [cash, setCash] = useState("");
     const [confirm, setConfirm] = useState(false);
+    const [errorCash, setErrorCash] = useState({ text: "", error: false });
+
+    function onChangeCash(event) {
+        setCash(event.target.value !== "" ? parseInt(event.target.value) : "")
+        if (event.target.value < 50) {
+            setErrorCash({ text: "You can't start with less than 50!", error: true })
+        } else {
+            setCash(parseInt(event.target.value))
+            setErrorCash({ text: "", error: false })
+        }
+    }
 
 
     return (
@@ -41,12 +52,26 @@ function Login({ game, getNewGame }) {
             <Paper elevation={3}>
                 <h3>Login</h3>
                 <form className={classes.root} noValidate autoComplete="off">
-                    <TextField id="outlined-basic" label="Nick" variant="outlined" onChange={(e) => setNick(e.target.value)} value={nick} disabled={confirm}/>
-                    <TextField id="outlined-basic" label="Cash" variant="outlined" onChange={(e) => setCash(parseInt(e.target.value))} value={cash} disabled={confirm}/>
-                    {confirm ? null : <Button className={classes.button} variant="contained" onClick={() => {getNewGame(nick, cash); setConfirm(true)}}>Confirm</Button>}
+                    <TextField
+                        id="outlined-basic"
+                        label="Nick"
+                        variant="outlined"
+                        onChange={(e) => setNick(e.target.value)}
+                        value={nick}
+                        disabled={confirm} />
+                    <TextField
+                        id="outlined-basic"
+                        label="Cash"
+                        variant="outlined"
+                        helperText={errorCash.text}
+                        error={errorCash.error}
+                        onChange={(e) => onChangeCash(e)}
+                        value={cash}
+                        disabled={confirm} />
+                    {confirm ? null : <Button disabled={errorCash.error} className={classes.button} variant="contained" onClick={() => { getNewGame(nick, cash); setConfirm(true) }}>Confirm</Button>}
                     {confirm ? <Link to={`/game/${game ? game.id : ""}`} style={{ textDecoration: 'none' }}>
-                    <Button className={classes.button} variant="contained">Start!</Button>
-                    </Link> : null }
+                        <Button className={classes.button} variant="contained">Start!</Button>
+                    </Link> : null}
                 </form>
             </Paper>
         </div>

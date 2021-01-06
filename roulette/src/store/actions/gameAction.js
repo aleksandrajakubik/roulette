@@ -68,13 +68,6 @@ export const updateGame = (game) => dispatch => {
     })
 }
 
-export const getUserCashAfterRoll = (cash) => dispatch => {
-    dispatch({
-        type: GET_CASH,
-        payload: cash
-    })
-}
-
 export const postBet = (userId, cash, type, id) => async dispatch => {
     try {
         await axios.post(`http://localhost:5000/games/${id}/bet`,{userId, cash, type});

@@ -45,13 +45,6 @@ export default function (state = initialState, action) {
             }
         }
 
-        case GET_CASH: {
-            return {
-                ...state,
-                user: { ...state.user, cash: action.payload }
-            }
-        }
-
         default: {
             return state
         }

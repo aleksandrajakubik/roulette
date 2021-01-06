@@ -7,20 +7,20 @@ const initialState = {
     allGames: [],
 }
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
 
-    switch(action.type){
+    switch (action.type) {
 
         case GET_NEWGAME: {
             return {
                 ...state,
-                user: {id: action.payload[0].id, nick: action.payload[0].nick, cash: action.payload[0].cash},
+                user: { id: action.payload[0].id, nick: action.payload[0].nick, cash: action.payload[0].cash },
                 game: action.payload[1]
             }
         }
 
         case GET_ALL_GAMES: {
-            if(action.payload !== false) {
+            if (action.payload !== false) {
                 return {
                     ...state,
                     allGames: action.payload
@@ -29,10 +29,13 @@ export default function(state = initialState, action) {
         }
 
         case UPDATE_GAME: {
-            return {
-                ...state, 
-                game: action.payload
+            if (action.payload.id === state.game.id) {
+                return {
+                    ...state,
+                    game: { ...state.game, users: action.payload.users}
+                }
             }
+            return state
         }
 
         case CONNECT_MQTT: {
@@ -44,8 +47,8 @@ export default function(state = initialState, action) {
 
         case GET_CASH: {
             return {
-                ...state, 
-                user: {...state.user, cash: action.payload}
+                ...state,
+                user: { ...state.user, cash: action.payload }
             }
         }
 

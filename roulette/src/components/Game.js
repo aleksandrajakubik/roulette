@@ -51,7 +51,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                 <p>{userCash}</p>
                 <p>Rolled number:</p>
                 <p>{rolledNumber ? rolledNumber : "Game has not started yet!"}</p>
-                <FormControl component="fieldset">
+                <FormControl component="fieldset" disabled={confirmed}>
                     <FormLabel component="legend">Your bet:</FormLabel>
                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
                         <FormControlLabel value="black" control={<Radio color="primary" />} label="Black" />
@@ -59,7 +59,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                         <FormControlLabel value="odd" control={<Radio color="primary" />} label="Odd" />
                         <FormControlLabel value="even" control={<Radio color="primary" />} label="Even" />
                     </RadioGroup>
-                    <TextField id="outlined-basic" label="Cash" onChange={(e) => setBet(parseInt(e.target.value))} value={bet} variant="outlined" />
+                    <TextField id="outlined-basic" disabled={confirmed} label="Cash" onChange={(e) => setBet(parseInt(e.target.value))} value={bet} variant="outlined" />
                 </FormControl>
                 {betted ? <Button
                     className={classes.button}
@@ -80,6 +80,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                 <Button
                     className={classes.button}
                     variant="contained"
+                    disabled={confirmed}
                     onClick={() => {
                         confirmBet(game.game.id);
                         setConfirmed(true)

@@ -20,9 +20,6 @@ function Chat({ id, user, client }) {
             setMessages(prevState => [...prevState, today + ' ' + payload.toString()]);
             }
         });
-        return () => {
-            client.publish(`chat/${id}`, `${user.nick} has left`)
-        }
     }, [client]);
 
 

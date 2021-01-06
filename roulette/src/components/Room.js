@@ -4,10 +4,10 @@ import '../styles/Room.css'
 import Game from './Game';
 import UserList from './UserList';
 import Chat from './Chat';
-import { updateGame } from '../store/actions/gameAction';
+import { updateGame, deleteUser } from '../store/actions/gameAction';
 
 
-function Room({ game, updateGame }) {
+function Room({ game, updateGame, deleteUser }) {
 
   useEffect(() => {
     game.client.subscribe(`update`);
@@ -16,6 +16,10 @@ function Room({ game, updateGame }) {
         updateGame(payload)
       }
     });
+    return () => {
+      deleteUser(game.game.id, game.user.id)
+      game.client.publish(`chat/${game.game.id}`, `${game.user.nick} has left`)
+    };
   }, []);
 
   return (
@@ -31,4 +35,4 @@ const mapStateToProps = (state) => ({
   game: state.game
 })
 
-export default connect(mapStateToProps, { updateGame })(Room);
+export default connect(mapStateToProps, { updateGame, deleteUser })(Room);

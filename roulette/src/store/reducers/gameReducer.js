@@ -40,7 +40,7 @@ export default function (state = initialState, action) {
             if (action.payload.id === state.game.id) {
                 return {
                     ...state,
-                    game: { ...state.game, users: action.payload.users}
+                    game: { ...state.game, users: action.payload.users, bets: action.payload.bets}
                 }
             }
             return state

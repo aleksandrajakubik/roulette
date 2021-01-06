@@ -8,9 +8,13 @@
     padding: 10px;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
-
+.Players {
+    justify-content: center;
+    width: 100%;
+}
 .Chatview {
     border: 1px black solid;
     margin: 10px;

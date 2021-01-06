@@ -37,7 +37,6 @@ function View({ game, updateGame, deleteUser }) {
             },
         },
     }));
-
     const classes = useStyles();
     const [rolledNumber, setRolledNumber] = useState("")
 
@@ -45,11 +44,15 @@ function View({ game, updateGame, deleteUser }) {
         <div className="View">
             <h2>Rolled number: {rolledNumber}</h2>
             <div className="ViewGame" >
+                <div className="Players">
+                    <h2>Players</h2>
+                </div>
                 {game.game.users.map(g =>
                     <div className={classes.paper}>
                         <Paper elevation={3}>
                             <p><b>{g.nick}</b></p>
                             <p>Cash: {g.cash}</p>
+                            <p>Bet: </p>
                         </Paper>
                     </div>
                 )
@@ -59,7 +62,6 @@ function View({ game, updateGame, deleteUser }) {
         </div>
     );
 }
-
 const mapStateToProps = (state) => ({
     game: state.game
 })

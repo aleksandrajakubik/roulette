@@ -38,8 +38,14 @@ function PlayerRole({ chosenGame }) {
                 <div className={classes.paper}>
                     <Paper elevation={3}>
                         <h3>Choose your role</h3>
+                        {chosenGame.users.length < chosenGame.maxUsers ? 
+                        <>
                         <Button className={classes.button} variant="contained" onClick={() => setRole("player")}>Player</Button>
                         <Button className={classes.button} variant="contained" onClick={() => setRole("viewer")}>Viewer</Button>
+                        </>
+                        :
+                        <Button className={classes.button} variant="contained" onClick={() => setRole("viewer")}>Viewer</Button>
+                        }
                     </Paper>
                  </div> : null}
         </div>

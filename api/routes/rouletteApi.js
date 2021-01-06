@@ -13,8 +13,7 @@ router.get("/games", function(req, res) {
     if(games.length === 0){
         return res.send(false)
     }
-    const availableGames = games.filter(g => g.users.length < g.maxUsers);
-    return res.send(`${JSON.stringify(availableGames)}`)
+    return res.send(`${JSON.stringify(games)}`)
 });
 
 router.post("/games", function(req, res) {
@@ -64,6 +63,7 @@ router.post("/games/:id/bet", function(req, res) {
     const game = games.find(game => game.id === id);
     let result = false;
     game.makeBet(userId, bet) ? result = true : null;
+    client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users, "bets": game.bets})}`)
     return res.send(result);
 });
 
@@ -85,6 +85,7 @@ router.put("/games/:id/bet", function(req, res) {
     const game = games.find(game => game.id === id);
     let result = false;
     game.changeBet(userId, bet) ? result = true : null;
+    client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users, "bets": game.bets})}`)
     return res.send(result)
 });
 

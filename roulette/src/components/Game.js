@@ -8,18 +8,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
-import { postBet, confirmBet, getUserCashAfterRoll, deleteUser } from '../store/actions/gameAction';
+import { postBet, confirmBet, deleteUser, changeBet } from '../store/actions/gameAction';
 
-function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll, deleteUser}) {
+function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
 
     useEffect(() => {
         client.subscribe('newGameStatus');
         client.subscribe('rolledNumber');
         client.on('message', (topic, payload, packet) => {
-            if(topic === 'newGameStatus'){
-                getUserCashAfterRoll(parseInt(payload.toString()))
-            } else if (topic === "rolledNumber") {
+            if (topic === "rolledNumber") {
                 setRolledNumber(parseInt(payload.toString()));
+                setBetted(false)
+                setConfirmed(false)
             }
         });
         return () => {
@@ -38,6 +38,8 @@ function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll, deleteU
     const [bet, setBet] = useState(0);
     const [value, setValue] = useState('black');
     const [rolledNumber, setRolledNumber] = useState("");
+    const [betted, setBetted] = useState(false);
+    const [confirmed, setConfirmed] = useState(false);
 
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -55,15 +57,38 @@ function Game({ game, client, postBet, confirmBet, getUserCashAfterRoll, deleteU
                 <FormControl component="fieldset">
                     <FormLabel component="legend">Your bet:</FormLabel>
                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-                        <FormControlLabel value="black" control={<Radio color="primary"/>} label="Black" />
-                        <FormControlLabel value="red" control={<Radio color="primary"/>} label="Red" />
-                        <FormControlLabel value="odd" control={<Radio color="primary"/>} label="Odd" />
-                        <FormControlLabel value="even" control={<Radio color="primary"/>} label="Even" />
+                        <FormControlLabel value="black" control={<Radio color="primary" />} label="Black" />
+                        <FormControlLabel value="red" control={<Radio color="primary" />} label="Red" />
+                        <FormControlLabel value="odd" control={<Radio color="primary" />} label="Odd" />
+                        <FormControlLabel value="even" control={<Radio color="primary" />} label="Even" />
                     </RadioGroup>
-                    <TextField id="outlined-basic" label="Cash" onChange={(e) => setBet(parseInt(e.target.value))} value={bet} variant="outlined"/>
+                    <TextField id="outlined-basic" label="Cash" onChange={(e) => setBet(parseInt(e.target.value))} value={bet} variant="outlined" />
                 </FormControl>
-                <Button className={classes.button} variant="contained" onClick={() => postBet(game.user.id, bet, value, game.game.id)}>Bet</Button>
-                <Button className={classes.button} variant="contained" onClick={() => confirmBet(game.game.id)}>Confirm</Button>
+                {betted ? <Button
+                    className={classes.button}
+                    variant="contained"
+                    disabled={confirmed}
+                    onClick={() => changeBet(game.user.id, bet, value, game.game.id)}>Change Bet</Button> :
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        disabled={confirmed}
+                        onClick={() => {
+                            postBet(game.user.id, bet, value, game.game.id);
+                            setBetted(true)
+                        }}>
+                        Bet
+                    </Button>
+                }
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    onClick={() => {
+                        confirmBet(game.game.id);
+                        setConfirmed(true)
+                    }}>
+                    Confirm
+                    </Button>
             </div>
         </div>
     )
@@ -73,4 +98,4 @@ const mapStateToProps = (state) => ({
     client: state.game.client
 })
 
-export default connect(mapStateToProps, { postBet, confirmBet, getUserCashAfterRoll, deleteUser })(Game);
+export default connect(mapStateToProps, { postBet, confirmBet, deleteUser, changeBet })(Game);

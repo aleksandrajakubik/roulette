@@ -83,6 +83,14 @@ export const postBet = (userId, cash, type, id) => async dispatch => {
     }
 }
 
+export const changeBet = (userId, cash, type, id) => async dispatch => {
+    try {
+        await axios.put(`http://localhost:5000/games/${id}/bet`,{userId, cash, type});
+    } catch(e) {
+        console.log(e)
+    }
+}
+
 export const confirmBet = (id) => async dispatch => {
     try {
         const res = await axios.post(`http://localhost:5000/games/${id}/confirm`);

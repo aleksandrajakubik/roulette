@@ -48,11 +48,16 @@ function View({ game, updateGame, deleteUser }) {
                     <h2>Players</h2>
                 </div>
                 {game.game.users.map(g =>
-                    <div className={classes.paper}>
+                    <div key={g.id} className={classes.paper}>
                         <Paper elevation={3}>
                             <p><b>{g.nick}</b></p>
                             <p>Cash: {g.cash}</p>
-                            <p>Bet: </p>
+                            <p>Bet cash: {game.game.bets.length > 0 ? 
+                                game.game.bets.filter(b => b["bettingUser"]["id"] === g.id).length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === g.id)[0].bet.cash : "no bet yet"
+                                : "no bet yet"}</p>
+                            <p>Bet type: {game.game.bets.length > 0 ? 
+                                game.game.bets.filter(b => b["bettingUser"]["id"] === g.id).length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === g.id)[0].bet.type : "no bet yet"
+                                : "no bet yet"}</p>
                         </Paper>
                     </div>
                 )

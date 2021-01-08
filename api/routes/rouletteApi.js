@@ -38,7 +38,7 @@ router.post("/games/:id", function(req, res) {
     const user = new User(uuid.v4(), nick, parseInt(cash));
     const game = games.find(game => game.id === id);
     game.addUser(user);
-    client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users})}`)
+    client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users, "bets": game.bets})}`)
     return res.send([user, game])
 });
 
@@ -52,7 +52,7 @@ router.delete("/games/:id/users/:userId", function(req, res) {
     const { id, userId } = req.params;
     const game = games.find(game => game.id === id);
     game.deleteUser(userId);
-    client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users})}`)
+    client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users, "bets": game.bets})}`)
     return res.send(true);
 })
 
@@ -72,7 +72,7 @@ router.post("/games/:id/confirm", function(req, res) {
     const game = games.find(game => game.id === id );
     const result = game.confirmBet();
     if(result) {
-        client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users})}`)
+        client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users, "bets": game.bets})}`)
         client.publish("rolledNumber", `${result}`)
     }
     return res.send(true)

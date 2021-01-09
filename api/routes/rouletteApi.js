@@ -92,8 +92,8 @@ router.post("/games/:id/request", function(req, res) {
       });
     if(game.answers.length === game.users.length) {
         game.answers.filter(a => a === "YES").length === game.users.length ? 
-        client.publish('answer', `${JSON.stringify({"answer": "YES", "nick": nick, "betCash": betCash, "betType": betType})}`) : 
-        client.publish('answer', `${JSON.stringify({"answer": "NO", "nick": nick, "betCash": betCash, "betType": betType})}`)
+        client.publish(`answer/${id}`, `${JSON.stringify({"answer": "YES", "nick": nick, "betCash": betCash, "betType": betType})}`) : 
+        client.publish(`answer/${id}`, `${JSON.stringify({"answer": "NO", "nick": nick, "betCash": betCash, "betType": betType})}`)
         const bet = {"cash": parseInt(betCash), "type": betType}
         game.changeBet(userId, bet) ? result = true : null;
     }

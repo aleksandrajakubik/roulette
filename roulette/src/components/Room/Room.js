@@ -22,6 +22,7 @@ function Room({ game, updateGame, deleteUser }) {
     };
   }, []);
 
+
   return (
     <div className="Room">
       <Game game={game} />

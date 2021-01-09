@@ -54,9 +54,9 @@ const DialogActions = withStyles((theme) => ({
 function CustomizedDialogs({ nick, userId, betCash, betType, sendChangeAnswer, id, client}) {
 
     useEffect(() => {
-        client.subscribe('answer');
+        client.subscribe(`answer/${id}`);
         client.on('message', (topic, payload, packet) => {
-            if (topic === "answer") {
+            if (topic === `answer/${id}`) {
                 if(JSON.parse(payload).answer.toString() === "YES") {
                     setText(`Users agreed for changing ${nick}'s bet!`);
                     setAnswered(true)

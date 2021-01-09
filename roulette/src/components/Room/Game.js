@@ -59,10 +59,21 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
     const [confirmed, setConfirmed] = useState(false);
     const [requestNick, setRequestNick] = useState("");
     const [changed, setChanged] = useState(false);
+    const [errorCash, setErrorCash] = useState({ text: "", error: false });
 
     const handleChange = (event) => {
         setValue(event.target.value);
     };
+
+    function onChangeCash(event) {
+        setBet(event.target.value !== "" ? parseInt(event.target.value) : "")
+        if (event.target.value > userCash) {
+            setErrorCash({ text: "You bet more than you have!", error: true })
+        } else {
+            setBet(parseInt(event.target.value))
+            setErrorCash({ text: "", error: false })
+        }
+    }
 
     const handleChangeBet = () => {
         client.publish(`request`, `${game.user.nick}`)
@@ -79,7 +90,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                     <img src={roulette} />
                 </div>
                 <div className='GameState'>
-                    {requestNick ? <ModalDialog nick={requestNick} userId={game.user.id} client={client} id={game.game.id} betCash={bet} betType={value}/> : null}
+                    {requestNick ? <ModalDialog nick={requestNick} userId={game.user.id} client={client} id={game.game.id} betCash={bet} betType={value} /> : null}
                     <p>Rolled number:</p>
                     <p>{rolledNumber ? rolledNumber : "Game has not started yet!"}</p>
                     <FormControl component="fieldset" disabled={confirmed}>
@@ -90,17 +101,17 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                             <FormControlLabel value="odd" control={<Radio color="primary" />} label="Odd" />
                             <FormControlLabel value="even" control={<Radio color="primary" />} label="Even" />
                         </RadioGroup>
-                        <TextField id="outlined-basic" disabled={confirmed} label="Cash" onChange={(e) => setBet(parseInt(e.target.value))} value={bet} variant="outlined" />
+                        <TextField id="outlined-basic" helperText={errorCash.text} error={errorCash.error} disabled={confirmed} label="Cash" onChange={(e) => onChangeCash(e)} value={bet} variant="outlined" />
                     </FormControl>
                     {betted ? <Button
                         className={classes.button}
                         variant="contained"
-                        disabled={changed}
+                        disabled={changed || errorCash.error}
                         onClick={handleChangeBet}>Change Bet</Button> :
                         <Button
                             className={classes.button}
                             variant="contained"
-                            disabled={confirmed}
+                            disabled={confirmed || errorCash.error}
                             onClick={() => {
                                 postBet(game.user.id, bet, value, game.game.id);
                                 setBetted(true)
@@ -111,7 +122,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                     <Button
                         className={classes.button}
                         variant="contained"
-                        disabled={confirmed}
+                        disabled={confirmed || errorCash.error}
                         onClick={() => {
                             confirmBet(game.game.id);
                             setConfirmed(true)

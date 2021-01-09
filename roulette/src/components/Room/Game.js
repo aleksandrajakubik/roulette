@@ -9,8 +9,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
-import { postBet, confirmBet, deleteUser, changeBet } from '../store/actions/gameAction';
-import roulette from '../styles/roulette.jpg';
+import { postBet, confirmBet, deleteUser, changeBet } from '../../store/actions/gameAction';
+import roulette from '../../styles/roulette.jpg';
 
 function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
 

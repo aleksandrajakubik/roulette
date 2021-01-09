@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import SearchGameLogin from './SearchGameLogin';
-import ViewerLogin from './ViewerLogin';
+import SearchGameLogin from '../Login/SearchGameLogin';
+import ViewerLogin from '../Login/ViewerLogin';
 
 function PlayerRole({ chosenGame }) {
 

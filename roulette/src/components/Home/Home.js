@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
-import { connectToMQTT } from '../store/actions/gameAction'
+import { connectToMQTT } from '../../store/actions/gameAction'
 
 function Home() {
 

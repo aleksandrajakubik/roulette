@@ -8,12 +8,12 @@ import {
 } from "react-router-dom";
 import { connectToMQTT } from '../store/actions/gameAction'
 import Nav from './Nav';
-import Home from './Home';
-import NewGameLogin from './NewGameLogin';
-import Room from './Room';
-import SearchGames from './SearchGames';
-import SearchGamesLogin from './SearchGameLogin';
-import View from './View';
+import Home from './Home/Home';
+import NewGameLogin from './Login/NewGameLogin';
+import Room from './Room/Room';
+import SearchGames from './Room/SearchGames';
+import SearchGamesLogin from './Login/SearchGameLogin';
+import View from './Room/View';
 
 function App({ game, connectToMQTT }) {
 

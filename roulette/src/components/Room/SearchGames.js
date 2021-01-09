@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
-import { getGames } from '../store/actions/gameAction';
+import { getGames } from '../../store/actions/gameAction';
 import PlayerRole from './PlayerRole';
 import { Button } from '@material-ui/core';
 

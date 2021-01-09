@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
-import '../styles/View.css';
+import '../../styles/View.css';
 import Paper from '@material-ui/core/Paper';
 import Chat from './Chat';
-import { updateGame, deleteUser } from '../store/actions/gameAction';
+import { updateGame, deleteUser } from '../../store/actions/gameAction';
 
 
 function View({ game, updateGame, deleteUser }) {

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from "react-redux";
-import '../styles/Room.css'
+import '../../styles/Room.css'
 import Game from './Game';
 import UserList from './UserList';
 import Chat from './Chat';
-import { updateGame, deleteUser } from '../store/actions/gameAction';
+import { updateGame, deleteUser } from '../../store/actions/gameAction';
 
 
 function Room({ game, updateGame, deleteUser }) {

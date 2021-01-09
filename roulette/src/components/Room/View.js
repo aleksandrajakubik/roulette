@@ -11,12 +11,12 @@ function View({ game, updateGame, deleteUser }) {
 
     useEffect(() => {
         game.client.subscribe(`update`);
-        game.client.subscribe(`rolledNumber`);
+        game.client.subscribe(`rolledNumber/${game.game.id}`);
         game.client.on('message', (topic, payload, packet) => {
             if (topic === 'update') {
                 updateGame(payload)
             }
-            if (topic === 'rolledNumber') {
+            if (topic === `rolledNumber/${game.game.id}`) {
                 setRolledNumber(parseInt(payload.toString()));
             }
         });

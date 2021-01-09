@@ -33,6 +33,11 @@ export default function (state = initialState, action) {
                     ...state,
                     allGames: action.payload
                 }
+            } else {
+                return {
+                    ...state,
+                    allGames: []
+                }
             }
         }
 

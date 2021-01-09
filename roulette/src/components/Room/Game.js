@@ -11,17 +11,18 @@ import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import { postBet, confirmBet, deleteUser, changeBet } from '../../store/actions/gameAction';
 import roulette from '../../styles/roulette.jpg';
+import LostDialog from './LoserDialog';
 
 function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
 
     useEffect(() => {
         client.subscribe('newGameStatus');
-        client.subscribe('rolledNumber');
+        client.subscribe(`rolledNumber/${game.game.id}`);
         client.subscribe(`request/${game.game.id}`);
         client.subscribe(`answer/${game.game.id}`);
         client.subscribe('clear')
         client.on('message', (topic, payload, packet) => {
-            if (topic === "rolledNumber") {
+            if (topic === `rolledNumber/${game.game.id}`) {
                 setRolledNumber(parseInt(payload.toString()));
                 setBetted(false)
                 setConfirmed(false)
@@ -40,6 +41,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
             }
             if (topic === 'clear') {
                 setRequest({})
+                setBet(0)
             }
         });
     }, [])
@@ -79,6 +81,10 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
         client.publish(`request/${game.game.id}`, `${JSON.stringify({"userId": game.user.id,"nick": game.user.nick, "betCash": bet, "betType": value})}`)
     }
 
+    const handleClose = () => {
+        deleteUser(game.game.id, game.user.id)
+    }
+
     const userCash = game.game.users.find(u => u.id === game.user.id).cash;
     const userBetCash = game.game.bets.length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === game.user.id).length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === game.user.id)[0].bet.cash : "no bet yet" : "no bet yet";
     const userBetType = game.game.bets.length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === game.user.id).length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === game.user.id)[0].bet.type : "no bet yet" : "no bet yet";
@@ -90,7 +96,8 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                     <img src={roulette} />
                 </div>
                 <div className='GameState'>
-                {request.nick ? <ModalDialog nick={request.nick} userId={request.userId} client={client} id={game.game.id} betCash={request.betCash} betType={request.betType} /> : null}
+                    {userCash === 0 ? <LostDialog handleClose={handleClose}/> : null}
+                    {request.nick ? <ModalDialog nick={request.nick} userId={request.userId} client={client} id={game.game.id} betCash={request.betCash} betType={request.betType} /> : null}
                     <p>Rolled number:</p>
                     <p>{rolledNumber ? rolledNumber : "Game has not started yet!"}</p>
                     <FormControl component="fieldset" disabled={confirmed}>

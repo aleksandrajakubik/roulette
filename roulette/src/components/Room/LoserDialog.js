@@ -6,6 +6,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
+import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
   root: {
@@ -24,8 +25,15 @@ const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-    </MuiDialogTitle>
+    <Typography variant="h6">{children}</Typography>
+    {onClose ? (
+    <Link to="/" style={{ textDecoration: 'none' }}>
+      <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+        <CloseIcon />
+      </IconButton>
+      </Link>
+    ) : null}
+  </MuiDialogTitle>
   );
 });
 
@@ -36,14 +44,14 @@ const DialogContent = withStyles((theme) => ({
 }))(MuiDialogContent);
 
 
-export default function LostDialog() {
+export default function LostDialog({ handleClose }) {
 
   const [open, setOpen] = React.useState(true);
 
   return (
     <div>
-      <Dialog  aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title">
+      <Dialog  aria-labelledby="customized-dialog-title" open={open} onClose={handleClose}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           :(
         </DialogTitle>
         <DialogContent dividers>

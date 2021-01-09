@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import '../../styles/Room.css'
 import Game from './Game';
@@ -21,7 +21,6 @@ function Room({ game, updateGame, deleteUser }) {
       game.client.publish(`chat/${game.game.id}`, `${game.user.nick}(player) has left`)
     };
   }, []);
-
 
   return (
     <div className="Room">

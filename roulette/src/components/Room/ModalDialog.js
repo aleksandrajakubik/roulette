@@ -61,7 +61,7 @@ function CustomizedDialogs({ nick, userId, betCash, betType, sendChangeAnswer, i
                     setText(`Users agreed for changing ${nick}'s bet!`);
                     setAnswered(true)
                 } else {
-                    setText(`Your bet won't be changed :(`);
+                    setText(`${nick}'s bet won't be changed :(`);
                     setAnswered(true)
                 }
             }

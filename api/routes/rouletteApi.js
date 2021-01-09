@@ -54,6 +54,9 @@ router.delete("/games/:id/users/:userId", function(req, res) {
     const game = games.find(game => game.id === id);
     game.deleteUser(userId);
     client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users, "bets": game.bets})}`)
+    if(game.users.length === 0) {
+        games = games.filter(g => g !== game)
+    }
     return res.send(true);
 })
 
@@ -74,7 +77,7 @@ router.post("/games/:id/confirm", function(req, res) {
     const result = game.confirmBet();
     if(result) {
         client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users, "bets": game.bets})}`)
-        client.publish("rolledNumber", `${result}`)
+        client.publish(`rolledNumber/${id}`, `${result}`)
     }
     return res.send(true)
 });

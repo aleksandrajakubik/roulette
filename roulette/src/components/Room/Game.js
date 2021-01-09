@@ -41,7 +41,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
             }
             if (topic === 'clear') {
                 setRequest({})
-                setBet(0)
+                setBet("")
             }
         });
     }, [])
@@ -54,7 +54,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
     }));
 
     const classes = useStyles();
-    const [bet, setBet] = useState(0);
+    const [bet, setBet] = useState("");
     const [value, setValue] = useState('black');
     const [rolledNumber, setRolledNumber] = useState("");
     const [betted, setBetted] = useState(false);
@@ -122,6 +122,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                             onClick={() => {
                                 postBet(game.user.id, bet, value, game.game.id);
                                 setBetted(true)
+                                setBet("")
                             }}>
                             Bet
                     </Button>

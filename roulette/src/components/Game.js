@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from "react-redux";
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import ModalDialog from './ModalDialog'
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -9,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
 import { postBet, confirmBet, deleteUser, changeBet } from '../store/actions/gameAction';
-import roulette from '../styles/roulette.jpg'
+import roulette from '../styles/roulette.jpg';
 
 function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
 
@@ -17,14 +18,31 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
         client.subscribe('newGameStatus');
         client.subscribe('rolledNumber');
         client.subscribe('request');
+        client.subscribe('answer');
+        client.subscribe('clear')
         client.on('message', (topic, payload, packet) => {
             if (topic === "rolledNumber") {
                 setRolledNumber(parseInt(payload.toString()));
                 setBetted(false)
                 setConfirmed(false)
+                setChanged(false);
+            }
+            if (topic === 'request') {
+                setRequestNick(payload.toString())
+            }
+            if (topic === 'answer') {
+                if (JSON.parse(payload).answer.toString() === "YES") {
+                    if (JSON.parse(payload).nick.toString() === game.user.nick) {
+                        setChanged(true);
+                        changeBet(game.user.id, JSON.parse(payload).betType.toString(), parseInt(JSON.parse(payload).betCash), game.game.id);
+                    }
+                }
+            }
+            if (topic === 'clear') {
+                setRequestNick("")
             }
         });
-    }, [client])
+    }, [])
 
     const useStyles = makeStyles((theme) => ({
         button: {
@@ -39,12 +57,20 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
     const [rolledNumber, setRolledNumber] = useState("");
     const [betted, setBetted] = useState(false);
     const [confirmed, setConfirmed] = useState(false);
+    const [requestNick, setRequestNick] = useState("");
+    const [changed, setChanged] = useState(false);
 
     const handleChange = (event) => {
         setValue(event.target.value);
     };
 
+    const handleChangeBet = () => {
+        client.publish(`request`, `${game.user.nick}`)
+    }
+
     const userCash = game.game.users.find(u => u.id === game.user.id).cash;
+    const userBetCash = game.game.bets.length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === game.user.id).length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === game.user.id)[0].bet.cash : "no bet yet" : "no bet yet";
+    const userBetType = game.game.bets.length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === game.user.id).length > 0 ? game.game.bets.filter(b => b["bettingUser"]["id"] === game.user.id)[0].bet.type : "no bet yet" : "no bet yet";
 
     return (
         <>
@@ -53,6 +79,7 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                     <img src={roulette} />
                 </div>
                 <div className='GameState'>
+                    {requestNick ? <ModalDialog nick={requestNick} userId={game.user.id} client={client} id={game.game.id} betCash={bet} betType={value}/> : null}
                     <p>Rolled number:</p>
                     <p>{rolledNumber ? rolledNumber : "Game has not started yet!"}</p>
                     <FormControl component="fieldset" disabled={confirmed}>
@@ -68,8 +95,8 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                     {betted ? <Button
                         className={classes.button}
                         variant="contained"
-                        disabled={confirmed}
-                        onClick={() => changeBet(game.user.id, bet, value, game.game.id)}>Change Bet</Button> :
+                        disabled={changed}
+                        onClick={handleChangeBet}>Change Bet</Button> :
                         <Button
                             className={classes.button}
                             variant="contained"
@@ -94,9 +121,11 @@ function Game({ game, client, postBet, confirmBet, deleteUser, changeBet }) {
                 </div>
             </div>
             <div className='Wallet'>
-                <h2>Wallet</h2>
+                <h2>Your game status:</h2>
                 <p>Your cash: </p>
                 <p>{userCash}</p>
+                <p>Bet cash: {userBetCash}</p>
+                <p>Bet type: {userBetType}</p>
             </div>
         </>
     )

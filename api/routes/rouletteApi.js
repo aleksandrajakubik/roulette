@@ -8,6 +8,7 @@ const MQTT = require("async-mqtt");
 const client = MQTT.connect("tcp://10.45.3.251:1883");
 
 let games = [];
+let answers = [];
 
 router.get("/games", function(req, res) {
     if(games.length === 0){
@@ -74,6 +75,27 @@ router.post("/games/:id/confirm", function(req, res) {
     if(result) {
         client.publish("update", `${JSON.stringify({"id": game.id, "users": game.users, "bets": game.bets})}`)
         client.publish("rolledNumber", `${result}`)
+    }
+    return res.send(true)
+});
+
+router.post("/games/:id/request", function(req, res) { 
+    const { id } = req.params;
+    const { answer, userId, nick, betType, betCash } = req.body;
+    const game = games.find(game => game.id === id );
+    game.answers = [...game.answers, answer]
+    client.subscribe('clear')
+    client.on('message', (topic, payload, packet) => {
+        if (topic === 'clear') {
+            game.answers = [];
+        }
+      });
+    if(game.answers.length === game.users.length) {
+        game.answers.filter(a => a === "YES").length === game.users.length ? 
+        client.publish('answer', `${JSON.stringify({"answer": "YES", "nick": nick, "betCash": betCash, "betType": betType})}`) : 
+        client.publish('answer', `${JSON.stringify({"answer": "NO", "nick": nick, "betCash": betCash, "betType": betType})}`)
+        const bet = {"cash": parseInt(betCash), "type": betType}
+        game.changeBet(userId, bet) ? result = true : null;
     }
     return res.send(true)
 });

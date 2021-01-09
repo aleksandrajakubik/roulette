@@ -11,6 +11,7 @@ class Game {
         this.maxUsers = 4;
         this.bets = [];
         this.confirmations = 0;
+        this.answers = [];
 
     }
 
@@ -88,6 +89,7 @@ class Game {
         losers.map(l => l.bettingUser.cash -= parseInt(l.bet["cash"]));
         this.bets = [];
         this.confirmations = 0;
+        this.answers = [];
         return rolledNumber;
     }
 

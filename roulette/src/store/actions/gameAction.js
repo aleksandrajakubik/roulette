@@ -89,6 +89,14 @@ export const postBet = (userId, cash, type, id) => async dispatch => {
     }
 }
 
+export const sendChangeAnswer = (id, userId, answer, nick, betCash, betType) => async dispatch => {
+    try {
+        await axios.post(`http://localhost:5000/games/${id}/request`,{answer, nick, userId, betCash, betType});
+    } catch(e) {
+        console.log(e)
+    }
+}
+
 export const changeBet = (userId, cash, type, id) => async dispatch => {
     try {
         await axios.put(`http://localhost:5000/games/${id}/bet`,{userId, cash, type});
